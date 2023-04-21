@@ -1,20 +1,18 @@
-<template>
-  <div>
-    <h1>Reservations</h1>
-    <button @click="showForm">Create Reservation: {{ formStore.showCreateForm }}</button>
-  </div>
-</template>
-
 <script>
 import axios from 'axios'
 import { reactive } from 'vue'
+
+import ReservationForm from '../components/ReservationForm.vue'
 
 const formStore = reactive({
   showCreateForm: false
 })
 
 export default {
-  name: 'Reservations',
+  name: 'Reservation-View',
+  components: {
+    ReservationForm,
+  },
   async mounted() {
     try {
       await axios.get('http://localhost:9090/api/reservations', {
@@ -25,7 +23,7 @@ export default {
     }
   },
   methods: {
-    showForm(event) {
+    showForm() {
       formStore.showCreateForm = !formStore.showCreateForm
     }
   },
@@ -36,3 +34,9 @@ export default {
   }
 }
 </script>
+
+<template>
+  <h1>Reservations</h1>
+  <button @click="showForm">Create Reservation: {{ formStore.showCreateForm }}</button>
+  <ReservationForm v-if="formStore.showCreateForm" />
+</template>

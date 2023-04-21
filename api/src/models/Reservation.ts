@@ -18,6 +18,12 @@ export class Reservation extends Model<Reservation> {
   @Column(DataType.UUID)
   id: string
 
+  @Column(DataType.UUID)
+  schedule_id: string
+
+  @Column(DataType.UUID)
+  override_id: string
+
   @Column(DataType.STRING)
   name: string
 
