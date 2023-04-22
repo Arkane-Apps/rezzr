@@ -109,7 +109,7 @@ export class InventoryController {
                 rezSlot.setHours(reqHour)
                 rezSlot.setMinutes(timeSlot)
 
-                availableSlots[timeSlot] = entry.slots - (await Reservation.getReservations(rezSlot)).length
+                availableSlots[timeSlot] = entry.slots - (await Reservation.getReservationsAtTime(rezSlot)).length
             }
         }
         return res.status(200).json({ slots: availableSlots });
