@@ -26,7 +26,7 @@ const validate_post = (req: Request, res: Response, next) => {
 const hasDateInventory = async (req: RezRequest, res: Response, next) => {
     let entry: Inventory
     let reqDate = Date.parse(req.params.date);
-    if (isNaN(reqDate)) {
+    if (isNaN(reqDate) || !reqDate) {
         return res.status(400).json({ message: `invalid date: ${req.params.date}` });
     }
     entry = await Inventory.findOne({
@@ -102,7 +102,7 @@ export class InventoryController {
         let reqDate = new Date(req.reqDate)
         let reqHour = parseInt(req.params.hour)
         let availableSlots = {}
-        if (entry.days[reqDate.getDay()] && reqHour <= entry.time_slot_start && reqHour <= entry.time_slot_end) {
+        if (entry && entry.days[reqDate.getDay()] && reqHour >= entry.time_slot_start && reqHour <= entry.time_slot_end) {
             // Get slots
             for (let timeSlot of timeSlots) {
                 let rezSlot = new Date(reqDate)
