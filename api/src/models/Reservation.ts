@@ -1,10 +1,14 @@
+import { Op } from 'sequelize'
 import {
+  AllowNull,
   AutoIncrement,
   Column,
   CreatedAt,
   DataType,
   DeletedAt,
+  IsDate,
   Model,
+  NotNull,
   PrimaryKey,
   Table,
   UpdatedAt,
@@ -21,9 +25,6 @@ export class Reservation extends Model<Reservation> {
   @Column(DataType.UUID)
   schedule_id: string
 
-  @Column(DataType.UUID)
-  override_id: string
-
   @Column(DataType.STRING)
   name: string
 
@@ -33,8 +34,11 @@ export class Reservation extends Model<Reservation> {
   @Column(DataType.INTEGER)
   party_size: number
 
+  @AllowNull(false)
+  @NotNull
+  @IsDate
   @Column(DataType.DATE)
-  datetime: Date
+  reservation_time: Date
 
   @DeletedAt
   deleted_at: Date
@@ -44,4 +48,13 @@ export class Reservation extends Model<Reservation> {
 
   @UpdatedAt
   updated_at: Date
+
+  public static async getReservations(reservationTime: Date) {
+    let rezs = await Reservation.findAll({
+      where: {
+        reservation_time: reservationTime
+      }
+    })
+    return rezs.map(x => x.dataValues)
+  }
 }

@@ -7,7 +7,7 @@ import { Reservation } from '../models/Reservation'
 export class ReservationController {
   @Get('')
   private async get(req: Request, res: Response) {
-    let reservations = Reservation.findAll();
+    let reservations = await Reservation.findAll();
     return res.json(reservations).status(200)
   }
 }
