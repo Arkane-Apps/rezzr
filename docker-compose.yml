@@ -24,7 +24,9 @@ services:
     ports:
       - "9090:8080"
     volumes:
+      # Mount the folder for dev work
       - ./api:/app
+      # Exclude the node modules folder so that local env doesn't mix with image
       - /app/node_modules
   frontend:
     build:
@@ -37,7 +39,10 @@ services:
     depends_on:
       - api
     volumes:
-      - ./frontend/src:/app/src
+      # Mount the folder for dev work
+      - ./frontend:/app
+      # Exclude the node modules folder so that local env doesn't mix with image
+      - /app/node_modules
     ports:
       - "8080:8080"
       - "8081:8081"
