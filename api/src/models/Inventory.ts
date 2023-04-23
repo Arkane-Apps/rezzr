@@ -75,7 +75,7 @@ export class Inventory extends Model<Inventory> {
     type: DataType.INTEGER,
     validate: {
       isLessThanTimeSlotEnd(value) {
-        if (value >= this.time_slot_end) {
+        if (parseInt(value) >= this.time_slot_end) {
           throw new Error('time_slot_end must be greater than time_slot_start')
         }
       },
@@ -92,7 +92,7 @@ export class Inventory extends Model<Inventory> {
     type: DataType.INTEGER,
     validate: {
       isGreaterThanTimeSlotStart(value) {
-        if (value <= this.time_slot_start) {
+        if (parseInt(value) <= this.time_slot_start) {
           throw new Error('time_slot_end must be greater than time_slot_start')
         }
       },

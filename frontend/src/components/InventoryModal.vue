@@ -27,6 +27,7 @@ const fieldValues = {
   },
   scheduleStart: 12,
   scheduleEnd: 20,
+  maxPartyValue: null,
   slotsValue: null
 }
 
@@ -36,8 +37,8 @@ const datesAreValid = (dateValue) => {
 const timesAreValid = (startTime, endTime) => {
   return parseInt(startTime) < parseInt(endTime)
 }
-const slotsAreValid = (slotValue) => {
-  return slotValue && parseInt(slotValue) > 0
+const numbersAreValid = (slotValue) => {
+  return slotValue && parseInt(slotValue) > 1
 }
 
 
@@ -57,14 +58,14 @@ export default {
   methods: {
     submitForm: async function (clickEvent, _fieldValues) {
       clickEvent.preventDefault();
-      if (datesAreValid(_fieldValues.scheduleWindow) && timesAreValid(_fieldValues.scheduleStart, _fieldValues.scheduleEnd) && slotsAreValid(_fieldValues.slotsValue)) {
+      if (datesAreValid(_fieldValues.scheduleWindow) && timesAreValid(_fieldValues.scheduleStart, _fieldValues.scheduleEnd) && numbersAreValid(_fieldValues.slotsValue) && numbersAreValid(_fieldValues.maxPartyValue)) {
         const startDateString = moment(_fieldValues.scheduleWindow[0]).format('YYYY-MM-DD');
         const endDateString = moment(_fieldValues.scheduleWindow[1]).format('YYYY-MM-DD');
         const requestBody = {
           schedule_start: startDateString,
           schedule_end: endDateString,
           days: Object.values(_fieldValues.weekDays),
-          party_size: 6,
+          party_size: _fieldValues.maxPartyValue,
           slots: _fieldValues.slotsValue,
           time_slot_start: _fieldValues.scheduleStart,
           time_slot_end: _fieldValues.scheduleEnd
@@ -99,8 +100,8 @@ export default {
         fieldState.timesValid = "is-danger"
       }
     },
-    validateSlots(slotValue) {
-      if (slotsAreValid(slotValue)) {
+    validateIntFields(slotValue) {
+      if (numbersAreValid(slotValue)) {
         fieldState.slotsValid = "is-success"
       } else {
         fieldState.slotsValid = "is-danger"
@@ -153,9 +154,14 @@ export default {
             </div>
           </RezField>
 
+          <RezField rezFieldLabel="Max Party Size">
+            <input class="input" type="text" placeholder="6" v-model="fieldValues.maxPartyValue"
+              :class="fieldState.slotsValid" @change="validateIntFields(fieldValues.maxPartyValue)">
+          </RezField>
+
           <RezField rezFieldLabel="Reservation slots per 15 minutes">
-            <input class="input" type="text" placeholder="6" v-model="fieldValues.slotsValue"
-              :class="fieldState.slotsValid" @change="validateSlots(fieldValues.slotsValue)">
+            <input class="input" type="text" placeholder="5" v-model="fieldValues.slotsValue"
+              :class="fieldState.slotsValid" @change="validateIntFields(fieldValues.slotsValue)">
           </RezField>
           <div class="control">
             <button class="button is-link" @click="submitForm($event, fieldValues)">Submit</button>
