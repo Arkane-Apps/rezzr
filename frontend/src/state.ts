@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 
 export const appState = reactive({
-  showInventoryCreateModal: false
+  showInventoryCreateModal: false,
+  showReservationCreateModal: false
 })

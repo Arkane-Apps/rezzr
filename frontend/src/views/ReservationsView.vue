@@ -1,35 +1,34 @@
 <script>
-import axios from 'axios'
 import { reactive } from 'vue'
 
-import ReservationForm from '../components/ReservationForm.vue'
+import { appState } from '../state'
+import ReservationModal from '../components/ReservationModal.vue'
 
-const formStore = reactive({
-  showCreateForm: false
+const pageState = reactive({
+  reservations: []
 })
 
 export default {
   name: 'Reservation-View',
   components: {
-    ReservationForm,
+    ReservationModal,
   },
   async mounted() {
     try {
-      await axios.get('http://localhost:9090/api/reservations', {
-        withCredentials: false
-      })
+      let resResp = await fetch('http://localhost:9090/api/reservations')
+      pageState.reservations = await resResp.json()
     } catch (error) {
       console.error(error)
     }
   },
   methods: {
-    showForm() {
-      formStore.showCreateForm = !formStore.showCreateForm
+    openModal() {
+      appState.showReservationCreateModal = true;
     }
   },
   data() {
     return {
-      formStore
+      pageState
     }
   }
 }
@@ -37,6 +36,20 @@ export default {
 
 <template>
   <h1>Reservations</h1>
-  <button @click="showForm">Create Reservation: {{ formStore.showCreateForm }}</button>
-  <ReservationForm v-if="formStore.showCreateForm" />
+  <button class="button is-primary" @click="openModal" data-target="create-res-modal">
+    Create Reservation
+  </button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th v-for="(resVal, resKey) in pageState.reservations[0]" :key="resKey">{{ resKey }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="resEntry in pageState.reservations" :key="resEntry.id">
+        <td v-for="(resVal, resKey) in resEntry" :key="resKey">{{ resVal }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <ReservationModal />
 </template>
