@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { version as uuidVersion } from 'uuid'
 import { validate as uuidValidate } from 'uuid'
 
-import { Inventory, Reservation } from '../models'
+import { Inventory } from '../models'
 
 interface RezRequest extends Request {
   reqDate?: number

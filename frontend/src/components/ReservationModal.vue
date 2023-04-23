@@ -91,7 +91,7 @@ export default {
 
           <RezField rezFieldLabel="Reservation Time">
             <VueDatePicker auto-apply v-model="fieldValues.reservationTime" :flow="pickerFlow" minutes-increment="15"
-              minutes-grid-increment="15" :is-24="false" />
+              minutes-grid-increment="15" />
           </RezField>
 
           <div class="control">
