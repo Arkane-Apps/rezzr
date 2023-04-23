@@ -31,7 +31,7 @@ export class TimeSlots {
 @Table({ tableName: 'inventory' })
 export class Inventory extends Model<Inventory> {
   @PrimaryKey
-  @Default(uuidv4())
+  @Default(uuidv4)
   @IsUUID(4)
   @Column(DataType.UUID)
   id: string
