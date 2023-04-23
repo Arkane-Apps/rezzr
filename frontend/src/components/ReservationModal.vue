@@ -58,6 +58,7 @@ export default {
           console.log(err)
         }
       }
+      window.location.reload();
     },
   }
 }
